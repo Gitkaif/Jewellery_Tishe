@@ -10,13 +10,13 @@ import {
 import { getFirestore, doc, setDoc, getDoc } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDjBrBFLOcX8QM6wnbc9hkhGOUOb3hVFNc",
-  authDomain: "tishejwellery.firebaseapp.com",
-  projectId: "tishejwellery",
-  storageBucket: "tishejwellery.firebasestorage.app",
-  messagingSenderId: "333864314698",
-  appId: "1:333864314698:web:fb706e47e9e5da27afc3b3",
-  measurementId: "G-TR4E3GE8K2"
+  apiKey: "AIzaSyDyg3zysbnXW5_mNacn55VRfetx-8mmX18",
+  authDomain: "tishejewellery.firebaseapp.com",
+  projectId: "tishejewellery",
+  storageBucket: "tishejewellery.firebasestorage.app",
+  messagingSenderId: "761895865872",
+  appId: "1:761895865872:web:93edbf754e08a4c6300495",
+  measurementId: "G-JQCH5LWGTW"
 };
 
 // Initialize Firebase
