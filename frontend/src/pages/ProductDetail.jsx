@@ -2,11 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getProductById } from '../firebase/products';
 import { useAuth } from '../contexts/AuthContext';
+import { useCart } from '../contexts/CartContext';
+import { useWishlist } from '../contexts/WishlistContext';
+import toast from 'react-hot-toast';
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+  const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [quantity, setQuantity] = useState(1);
@@ -37,10 +42,12 @@ const ProductDetail = () => {
   }, [id]);
 
   const handleAddToCart = () => {
-    // Add to cart functionality will be implemented later
-    console.log('Added to cart:', { ...product, quantity });
-    // For now, just show a success message
-    alert(`${quantity} ${product.name} added to cart!`);
+    if (!currentUser) {
+      toast.error('Please log in to add items to your cart');
+      navigate('/login', { state: { from: `/product/${id}` } });
+      return;
+    }
+    addToCart(product, quantity);
   };
 
   const handleBuyNow = () => {
@@ -48,6 +55,15 @@ const ProductDetail = () => {
     console.log('Buy now:', { ...product, quantity });
     // For now, just show a message
     alert(`Proceeding to checkout with ${quantity} ${product.name}`);
+  };
+
+  const handleWishlist = () => {
+    if (!currentUser) {
+      toast.error('Please log in to save items to your wishlist');
+      navigate('/login', { state: { from: `/product/${id}` } });
+      return;
+    }
+    toggleWishlist(product);
   };
 
   if (loading) {
@@ -182,6 +198,16 @@ const ProductDetail = () => {
                   >
                     Buy Now
                   </button>
+                  <button
+                    onClick={handleWishlist}
+                    className={`flex-1 py-3 px-8 border rounded-md shadow-sm text-base font-medium ${
+                      isInWishlist(product.id)
+                        ? 'border-pink-600 text-pink-600 bg-pink-50 hover:bg-pink-100'
+                        : 'border-gray-300 text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    {isInWishlist(product.id) ? 'In Wishlist' : 'Save to Wishlist'}
+                  </button>
                 </div>
 
                 {!currentUser && (
@@ -192,7 +218,7 @@ const ProductDetail = () => {
                     >
                       Sign in
                     </button>{' '}
-                    to add this item to your wishlist
+                    to save this item for later
                   </p>
                 )}
               </div>
