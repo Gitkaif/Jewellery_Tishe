@@ -50,6 +50,44 @@ const Home = () => {
 
   const visibleCategories = categories.filter((category) => category.isActive !== false);
 
+  const featurePosters = [
+    {
+      title: visibleCategories[0]?.name || 'New Arrivals',
+      subtitle: 'Handcrafted for everyday shimmer',
+      tag: 'Now Trending',
+      slug: visibleCategories[0]?.slug || 'all',
+      accent: {
+        border: 'border-rose-100',
+        bg: 'bg-rose-50/60',
+        heading: 'text-rose-900',
+        text: 'text-rose-600',
+        tagBg: 'bg-rose-100 text-rose-800',
+        icon: 'text-rose-500'
+      }
+    },
+    {
+      title: visibleCategories[1]?.name || 'Occasion Sets',
+      subtitle: 'Couture pieces for special moments',
+      tag: 'Limited Release',
+      slug: visibleCategories[1]?.slug || 'all',
+      accent: {
+        border: 'border-amber-100',
+        bg: 'bg-amber-50/70',
+        heading: 'text-amber-900',
+        text: 'text-amber-600',
+        tagBg: 'bg-amber-100 text-amber-800',
+        icon: 'text-amber-500'
+      }
+    }
+  ];
+
+  const heroPoster = {
+    title: 'Curated Capsule Wardrobe',
+    subtitle: 'Layerable necklaces, stackable rings, and delicate hoops designed to mix & match.',
+    bulletPoints: ['Stylist approved combinations', 'Ships with polishing cloth & care card'],
+    slug: visibleCategories[2]?.slug || 'all'
+  };
+
   return (
     <div className="space-y-16">
       {/* Hero Section */}
@@ -123,6 +161,92 @@ const Home = () => {
             ))}
           </div>
         )}
+        {visibleCategories.length > 0 && (
+          <div className="mt-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 w-full mx-auto">
+              <div className="flex flex-col gap-4">
+                {featurePosters.map((poster) => (
+                  <Link
+                    key={poster.title}
+                    to={`/category/${poster.slug}`}
+                    className={`relative h-[190px] bg-white border-2 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition ${poster.accent.border}`}
+                  >
+                    <div className={`absolute inset-0 ${poster.accent.bg}`} />
+                    <div className="relative z-10 p-6 h-full flex flex-col justify-between">
+                      <div>
+                        <h3 className={`text-2xl font-semibold mb-1 ${poster.accent.heading}`}>
+                          {poster.title}
+                        </h3>
+                        <p className={`text-sm ${poster.accent.text}`}>{poster.subtitle}</p>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className={`text-xs font-semibold px-3 py-1 rounded-full ${poster.accent.tagBg}`}>
+                          {poster.tag}
+                        </span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className={`h-7 w-7 ${poster.accent.icon}`}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              <Link
+                to={`/category/${heroPoster.slug}`}
+                className="relative h-auto md:h-[390px] bg-white border-2 border-indigo-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition"
+              >
+                <div className="absolute inset-0 bg-indigo-50/60" />
+                <div className="relative z-10 p-6 md:p-8 h-full flex flex-col justify-between">
+                  <div>
+                    <h3 className="text-3xl font-semibold text-indigo-900 mb-3">
+                      {heroPoster.title}
+                    </h3>
+                    <p className="text-indigo-700 text-base">
+                      {heroPoster.subtitle}
+                    </p>
+                  </div>
+                  <div className="space-y-3">
+                    {heroPoster.bulletPoints.map((point) => (
+                      <div key={point} className="flex items-center space-x-3 text-sm text-gray-700">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-5 w-5 text-indigo-500"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>{point}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex items-center justify-between mt-4">
+                    <span className="text-xs font-semibold bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full">
+                      Styling Studio Edit
+                    </span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-8 w-8 text-indigo-500"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Featured Products */}
@@ -155,70 +279,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="container mx-auto px-4 py-16">
-        <div className="flex flex-col md:flex-row items-center">
-          <div className="md:w-1/2 mb-10 md:mb-0 md:pr-10">
-            <h2 className="text-3xl font-bold mb-6">About Tishe</h2>
-            <p className="text-gray-700 mb-6">
-              At Tishe, we believe that jewelry is more than just an accessory – it's a form of self-expression. Each piece in our collection is carefully selected for its quality, craftsmanship, and timeless appeal.
-            </p>
-            <p className="text-gray-700 mb-8">
-              Our mission is to provide you with beautiful, ethically sourced jewelry that you can feel good about wearing. We work with skilled artisans who share our commitment to quality and sustainability.
-            </p>
-            <Link
-              to="/about"
-              className="inline-block bg-pink-600 hover:bg-pink-700 text-white font-semibold py-3 px-8 rounded-md transition-colors"
-            >
-              Our Story
-            </Link>
-          </div>
-          
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section className="bg-pink-50 py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">What Our Customers Say</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                quote: "The quality of the jewelry is exceptional. I get compliments every time I wear my new necklace!",
-                author: "Sarah M.",
-                rating: 5
-              },
-              {
-                quote: "Beautiful pieces and excellent customer service. Will definitely be shopping here again!",
-                author: "Michael T.",
-                rating: 5
-              },
-              {
-                quote: "I was looking for something unique and found exactly what I wanted at Tishe. Highly recommend!",
-                author: "Jennifer K.",
-                rating: 5
-              }
-            ].map((testimonial, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-                <div className="flex mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <svg
-                      key={i}
-                      className={`w-5 h-5 ${i < testimonial.rating ? 'text-yellow-400' : 'text-gray-300'}`}
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                <p className="text-gray-700 italic mb-4">"{testimonial.quote}"</p>
-                <p className="font-semibold">- {testimonial.author}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="bg-gradient-to-r from-pink-600 to-purple-600 text-white py-16">

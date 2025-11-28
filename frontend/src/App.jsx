@@ -6,6 +6,8 @@ import Footer from './components/Footer/Footer';
 import Home from './components/Home/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import About from './pages/About';
+import Contact from './pages/Contact';
 import CategoryPage from './pages/CategoryPage';
 import ProductDetail from './pages/ProductDetail';
 import AddProduct from './pages/Admin/AddProduct';
@@ -14,6 +16,7 @@ import AdminDashboard from './pages/Admin/AdminDashboard';
 import EditProduct from './pages/Admin/EditProduct';
 import Wishlist from './pages/Wishlist';
 import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
 import { Toaster } from 'react-hot-toast';
 
 // Protected Route Component
@@ -33,10 +36,20 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
               <Route path="/category/:categoryName" element={<CategoryPage />} />
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/cart" element={<Cart />} />
+              <Route
+                path="/checkout"
+                element={
+                  <ProtectedRoute>
+                    <Checkout />
+                  </ProtectedRoute>
+                }
+              />
               <Route
                 path="/admin/dashboard"
                 element={

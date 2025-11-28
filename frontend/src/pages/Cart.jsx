@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 
 const Cart = () => {
   const { items, updateQuantity, removeFromCart, clearCart, subtotal } = useCart();
+  const navigate = useNavigate();
 
   const summary = useMemo(() => {
     const shipping = items.length ? 4.99 : 0;
@@ -133,6 +134,7 @@ const Cart = () => {
           </dl>
           <button
             type="button"
+            onClick={() => navigate('/checkout')}
             className="w-full mt-6 inline-flex justify-center items-center px-4 py-3 text-base font-medium rounded-md bg-pink-600 text-white hover:bg-pink-700"
           >
             Checkout

@@ -5,7 +5,7 @@ import { useWishlist } from '../../contexts/WishlistContext';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
-const ProductCard = ({ product, compact = false }) => {
+const ProductCard = ({ product }) => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
@@ -16,16 +16,15 @@ const ProductCard = ({ product, compact = false }) => {
     product.images?.[0] ||
     'https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?auto=format&fit=crop&w=500&q=60';
 
-  const handleCardClick = (e) => {
-    // Don't navigate if the click was on the button or a link
-    if (e.target.tagName === 'BUTTON' || e.target.closest('button, a')) {
+  const handleCardClick = (event) => {
+    if (event.target.tagName === 'BUTTON' || event.target.closest('button, a')) {
       return;
     }
     navigate(`/product/${product.id}`);
   };
 
-  const handleAddToCart = (e) => {
-    e.stopPropagation(); // Prevent card click event
+  const handleAddToCart = (event) => {
+    event.stopPropagation();
     if (!currentUser) {
       toast.error('Please log in to add items to your cart');
       navigate('/login', { state: { from: `/product/${product.id}` } });
@@ -34,8 +33,8 @@ const ProductCard = ({ product, compact = false }) => {
     addToCart(product, 1);
   };
 
-  const handleWishlist = (e) => {
-    e.stopPropagation();
+  const handleWishlist = (event) => {
+    event.stopPropagation();
     if (!currentUser) {
       toast.error('Please log in to save items to your wishlist');
       navigate('/login', { state: { from: `/product/${product.id}` } });
@@ -45,24 +44,22 @@ const ProductCard = ({ product, compact = false }) => {
   };
 
   return (
-    <div 
+    <div
       onClick={handleCardClick}
-      className={`group bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 h-full flex flex-col cursor-pointer hover:ring-2 hover:ring-pink-500`}
+      className="w-56 h-96 bg-white/90 backdrop-blur rounded-2xl border border-gray-100 shadow-md hover:shadow-xl hover:-translate-y-1 transition-all duration-300 cursor-pointer flex flex-col overflow-hidden"
     >
-      <div className="relative h-48 w-full overflow-hidden rounded-md bg-gray-200">
+      <div className="relative h-48 w-full">
         <img
           src={imageSrc}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <button
           type="button"
           onClick={handleWishlist}
           aria-label="Toggle wishlist"
-          className={`absolute top-3 right-3 h-9 w-9 rounded-full flex items-center justify-center transition-colors ${
-            isInWishlist(product.id)
-              ? 'bg-white text-pink-600 shadow'
-              : 'bg-black bg-opacity-40 text-white hover:bg-opacity-60'
+          className={`absolute top-3 right-3 p-2 rounded-full bg-white/80 backdrop-blur shadow ${
+            isInWishlist(product.id) ? 'text-pink-600' : 'text-gray-500'
           }`}
         >
           <svg
@@ -80,23 +77,39 @@ const ProductCard = ({ product, compact = false }) => {
             />
           </svg>
         </button>
+        <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/50 to-transparent" />
       </div>
-      <div className="mt-3 flex-grow flex flex-col">
-        <h3 className="text-base font-medium text-gray-900 line-clamp-2 group-hover:text-pink-600 transition-colors">
-          {product.name}
-        </h3>
-        <p className="mt-1 text-sm text-gray-500 line-clamp-2">
-          {product.description}
+
+      <div className="flex flex-col flex-1 px-4 py-3 space-y-3">
+        <p className="text-[11px] uppercase tracking-wide text-gray-400">
+          {product.categoryName || product.category || 'Jewelry'}
         </p>
-        <div className="mt-2 flex justify-between items-center">
-          <p className="text-lg font-bold text-gray-900">₹{product.price?.toFixed(2) || '0.00'}</p>
+        <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">{product.name}</h3>
+        <p className="text-sm text-gray-500 line-clamp-2 flex-1">{product.description || '—'}</p>
+
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-lg font-bold text-gray-900">₹{product.price?.toFixed(2) || '0.00'}</p>
+            {product.mrp && product.mrp > product.price && (
+              <p className="text-xs text-green-600 font-medium">
+                Save {Math.round(((product.mrp - product.price) / product.mrp) * 100)}%
+              </p>
+            )}
+          </div>
           <button
-            className="py-2 px-4 bg-pink-600 text-white text-sm rounded-md hover:bg-pink-700 transition-colors"
+            className="text-sm font-medium text-pink-600 hover:text-pink-700"
             onClick={handleAddToCart}
           >
-            Add to Cart
+            Add
           </button>
         </div>
+
+        <button
+          onClick={handleAddToCart}
+          className="w-full py-2 text-sm font-semibold rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 text-white shadow hover:shadow-lg transition"
+        >
+          Add to Cart
+        </button>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 const UserProfile = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-  const { currentUser, logout } = useAuth();
+  const { currentUser, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   // Close dropdown when clicking outside
@@ -39,12 +39,9 @@ const UserProfile = () => {
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center space-x-2 focus:outline-none"
       >
-        <div className="h-8 w-8 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-semibold">
+        <div className="h-9 w-9 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-white flex items-center justify-center text-sm font-semibold shadow-sm">
           {currentUser.email ? currentUser.email[0].toUpperCase() : 'U'}
         </div>
-        <span className="hidden md:inline text-sm font-medium text-gray-700">
-          {currentUser.email}
-        </span>
         <svg
           className={`h-4 w-4 text-gray-500 transition-transform duration-200 ${
             isOpen ? 'transform rotate-180' : ''
@@ -88,6 +85,16 @@ const UserProfile = () => {
               <span className="mr-3 text-base">🛒</span>
               Cart
             </Link>
+            {isAdmin && (
+              <Link
+                to="/admin/dashboard"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition-colors"
+              >
+                <span className="mr-3 text-base">📊</span>
+                Admin Dashboard
+              </Link>
+            )}
           </div>
           <div className="border-t border-gray-100 pt-2">
             <button
